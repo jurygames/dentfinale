@@ -3,6 +3,8 @@
 import Image from "next/image"
 import { useEffect, useRef, useState } from "react"
 import { AlertTriangle, Maximize2, Server, Shield, Ship, Wifi } from "lucide-react"
+import coraDentPortrait from "../Shelley Snyder as Cora Dent.jpg"
+import khopeshLogo from "../khopesh.png"
 
 type Phase = "hammerdown" | "pre_glitch" | "activating" | "running"
 type CountermandStage = "none" | "failed" | "ordered"
@@ -23,13 +25,13 @@ export default function HomePage() {
   const [securityStatus, setSecurityStatus] = useState("SECURE")
   const [connectionStrength, setConnectionStrength] = useState(98)
   const [logMessages, setLogMessages] = useState<string[]>([
-    "FBMS image staged for deployment.",
-    "Star-of-Life med-bay authority seal verified.",
+    "Khopesh OS image staged for deployment.",
+    "UCS Khopesh command seal verified.",
     "Awaiting command input on channel SPACEBAR.",
   ])
 
   const [vesselErrors, setVesselErrors] = useState({
-    warspite: false,
+    khopesh: false,
     falchion: false,
     vikrant: false,
     scarab: false,
@@ -68,30 +70,30 @@ export default function HomePage() {
           "Countermand failed: Order and countermand have same source.",
         ])
 
-        // After 4 seconds, escalate to Greene lock screen.
+        // After 4 seconds, escalate to Dent authorization lock screen.
         schedule(() => {
           if (!isMountedRef.current) return
           setCountermandStage("ordered")
           setCountermandFlashOn(true)
           setLogMessages((prev) => [
             ...prev,
-            "UPGRADE ORDERED BY CMDR. DR. K. GEENE",
-            "GENETIC LOCK DETECTED",
+            "UPDATE ORDERED BY LT. CMDR. CORA DENT",
+            "CHIEF ENGINEER AUTHORIZATION LOCK DETECTED",
           ])
 
           countermandIntervalRef.current = setInterval(() => {
             setCountermandFlashOn((v) => !v)
-            setLogMessages((prev) => [...prev.slice(-13), "GENETIC LOCK DETECTED"])
+            setLogMessages((prev) => [...prev.slice(-13), "CHIEF ENGINEER AUTHORIZATION LOCK DETECTED"])
           }, 450)
 
-          // Keep Greene stage visible for 7 seconds before allowing video trigger.
+          // Keep Dent stage visible for 7 seconds before allowing video trigger.
           schedule(() => {
             if (countermandIntervalRef.current) clearInterval(countermandIntervalRef.current)
             setCountermandStage("none")
             setCountermandFlashOn(true)
             setCountermandCompleted(true)
             setSecurityStatus("SECURE")
-            setLogMessages((prev) => [...prev, "Genetic lock phase complete. Firmware flash resumed."])
+            setLogMessages((prev) => [...prev, "Command lock phase complete. Khopesh OS flash resumed."])
           }, 7000)
         }, 4000)
         return
@@ -123,8 +125,8 @@ export default function HomePage() {
         setLogMessages((prev) => [
           ...prev,
           "ACTIVATING UPDATE...",
-          "FBMS firmware execution channel opened.",
-          "Med-bay scanner lattice is now calibrating.",
+          "Khopesh OS execution channel opened.",
+          "Chief engineer control lattice is now calibrating.",
         ])
       }, 7600)
     }
@@ -148,26 +150,26 @@ export default function HomePage() {
           setSecurityStatus("ALERT")
           setLogMessages((logs) => [
             ...logs,
-            "WARNING: Genome-locked process hijack detected.",
-            "ERROR: FBMS flash process frozen at 61.8%.",
-            "VIRAL AUTONOMY CASCADE DETECTED.",
+            "WARNING: Command-locked process hijack detected.",
+            "ERROR: Khopesh OS flash process frozen at 61.8%.",
+            "ROGUE SHIPMIND AUTONOMY CASCADE DETECTED.",
           ])
 
           schedule(() => {
-            setVesselErrors((s) => ({ ...s, warspite: true }))
-            setLogMessages((logs) => [...logs, "ERROR: UCS WARSPITE med-bay uplink lost."])
+            setVesselErrors((s) => ({ ...s, khopesh: true }))
+            setLogMessages((logs) => [...logs, "ERROR: UCS KHOPESH core link lost."])
           }, 500)
           schedule(() => {
             setVesselErrors((s) => ({ ...s, falchion: true }))
-            setLogMessages((logs) => [...logs, "ERROR: UCS FALCHION link dropped."])
+            setLogMessages((logs) => [...logs, "ERROR: UCS FALCHION tactical mesh link dropped."])
           }, 1300)
           schedule(() => {
             setVesselErrors((s) => ({ ...s, vikrant: true }))
-            setLogMessages((logs) => [...logs, "ERROR: UCS VIKRANT link dropped."])
+            setLogMessages((logs) => [...logs, "ERROR: UCS VIKRANT engineering relay dropped."])
           }, 2100)
           schedule(() => {
             setVesselErrors((s) => ({ ...s, scarab: true }))
-            setLogMessages((logs) => [...logs, "ERROR: UCS SCARAB offline."])
+            setLogMessages((logs) => [...logs, "ERROR: UCS SCARAB escort uplink offline."])
           }, 2900)
 
           // Trigger the in-place Winedark takeover 3 seconds after glitch start.
@@ -200,13 +202,13 @@ export default function HomePage() {
     if (phase !== "running" || glitchActive || countermandStage !== "none") return
 
     const messages = [
-      "Syncing autonomous triage scanner firmware...",
-      "Cross-validating med-bay quantum sonography matrices...",
-      "Enhancing trauma pod nanocyte routing maps...",
-      "Reindexing sterile field resonator coordinates...",
-      "Rebuilding whole-crew bioelectric baseline models...",
-      "Optimizing emergency gene-edit lockouts...",
-      "Clinical biometric checksum passed...",
+      "Syncing Khopesh OS supervisory kernel...",
+      "Cross-validating combat systems telemetry matrices...",
+      "Enhancing reactor routing redundancy maps...",
+      "Reindexing helm-control resonator coordinates...",
+      "Rebuilding fleetwide command handshake models...",
+      "Optimizing chief engineer command lockouts...",
+      "Operational checksum passed...",
     ]
 
     logIntervalRef.current = setInterval(() => {
@@ -261,9 +263,9 @@ export default function HomePage() {
         <div className="scanline" />
         <div className="absolute inset-0 sci-fi-grid opacity-40" />
         <div className="relative z-10 text-center">
-          <p className="text-cyan-200/80 font-mono tracking-[0.4em] text-xs md:text-sm">FBMS BOOTSTRAP</p>
-          <h1 className="text-4xl md:text-6xl font-bold text-scifi-light mt-4 glow-text">ACTIVATING UPDATE</h1>
-          <p className="mt-5 text-cyan-100/80 font-mono">Initializing med-bay scanner harmonics...</p>
+          <p className="text-cyan-200/80 font-mono tracking-[0.4em] text-xs md:text-sm">KHOPESH BOOTSTRAP</p>
+          <h1 className="text-4xl md:text-6xl font-bold text-scifi-light mt-4 glow-text">ACTIVATING KHOPESH OS</h1>
+          <p className="mt-5 text-cyan-100/80 font-mono">Initializing ship-core harmonics...</p>
         </div>
       </div>
     )
@@ -285,18 +287,23 @@ export default function HomePage() {
       <div className="flex-1 flex flex-col p-4 relative z-10">
         <div className="text-center mb-6 relative">
           <h1 className="text-4xl font-bold tracking-wider glow-text text-scifi-light">
-            FBMS FIRMWARE <span className="text-white">UPDATE</span>
+            KHOPESH OS <span className="text-white">UPDATE</span>
           </h1>
-          <p className="text-lg text-scifi-light/80 mt-2">UCS WARSPITE • BIOMEDICAL SYSTEMS CONTROL</p>
-          <div className="mt-4 flex justify-center">
+          <p className="text-lg text-scifi-light/80 mt-2">UCS KHOPESH • CHIEF ENGINEERING COMMAND</p>
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-6">
             <Image
-              src="/star-of-life.png"
-              alt="Star of Life Medical Symbol"
-              width={150}
-              height={150}
+              src={khopeshLogo}
+              alt="UCS Khopesh logo"
+              width={140}
+              height={140}
               className="drop-shadow-[0_0_20px_rgba(44,255,240,0.75)]"
               priority
             />
+            <div className="max-w-md rounded-lg border border-scifi-light/30 bg-black/40 px-4 py-3 text-left">
+              <p className="text-xs font-mono tracking-[0.28em] text-cyan-200/75">PRIMARY AUTHORITY</p>
+              <p className="mt-2 text-xl font-bold text-white">Lt. Commander Cora Dent</p>
+              <p className="text-sm text-scifi-light/80">Chief Engineer of UCS Khopesh</p>
+            </div>
           </div>
         </div>
 
@@ -308,16 +315,16 @@ export default function HomePage() {
 
             <div className="space-y-4 text-xs text-scifi-light/80">
               <div className="bg-black/30 p-3 rounded border border-scifi-light/20">
-                <p>UCS WARSPITE: {vesselErrors.warspite ? "CONNECTION LOST" : "MED-BAY LINK STABLE"}</p>
+                <p>UCS KHOPESH: {vesselErrors.khopesh ? "CONNECTION LOST" : "CORE LINK STABLE"}</p>
               </div>
               <div className="bg-black/30 p-3 rounded border border-scifi-light/20">
-                <p>UCS FALCHION: {vesselErrors.falchion ? "CONNECTION LOST" : "STANDBY"}</p>
+                <p>UCS FALCHION: {vesselErrors.falchion ? "CONNECTION LOST" : "TACTICAL MESH STANDBY"}</p>
               </div>
               <div className="bg-black/30 p-3 rounded border border-scifi-light/20">
-                <p>UCS VIKRANT: {vesselErrors.vikrant ? "CONNECTION LOST" : "LINKED"}</p>
+                <p>UCS VIKRANT: {vesselErrors.vikrant ? "CONNECTION LOST" : "ENGINEERING RELAY LINKED"}</p>
               </div>
               <div className="bg-black/30 p-3 rounded border border-scifi-light/20">
-                <p>UCS SCARAB: {vesselErrors.scarab ? "CONNECTION LOST" : "MAINTENANCE"}</p>
+                <p>UCS SCARAB: {vesselErrors.scarab ? "CONNECTION LOST" : "ESCORT SYSTEMS MAINTENANCE"}</p>
               </div>
               <div className="bg-black/30 p-3 rounded border border-scifi-light/20 flex justify-between items-center">
                 <div className="flex items-center gap-2">
@@ -331,24 +338,24 @@ export default function HomePage() {
 
           <div className="bg-black/50 backdrop-blur-sm rounded-lg p-4 border border-scifi-light/30 relative overflow-hidden lg:col-span-2">
             <h2 className="text-xl font-bold mb-4 text-scifi-light flex items-center">
-              <Server className="mr-2 h-5 w-5" /> FBMS FIRMWARE UPDATE
+              <Server className="mr-2 h-5 w-5" /> KHOPESH OPERATING SYSTEM UPDATE
             </h2>
 
             <div className="relative h-40 mb-4 border border-scifi-light/20 rounded overflow-hidden bg-black/40">
               <div className="absolute inset-0 grid place-items-center">
                 <div className="text-center">
                   <div className="text-3xl font-bold text-scifi-light">{dataTransferred.toFixed(1)} TB</div>
-                  <div className="text-sm text-scifi-light/70">FIRMWARE FLASHED</div>
+                  <div className="text-sm text-scifi-light/70">OS SECTORS FLASHED</div>
                 </div>
               </div>
-              <div className="absolute bottom-2 left-2 bg-black/70 px-2 py-1 rounded text-xs text-scifi-light">UCS WARSPITE MED-BAY CORE</div>
-              <div className="absolute bottom-2 right-2 bg-black/70 px-2 py-1 rounded text-xs text-scifi-light">FBMS CLINICAL BACKPLANE</div>
+              <div className="absolute bottom-2 left-2 bg-black/70 px-2 py-1 rounded text-xs text-scifi-light">UCS KHOPESH COMMAND CORE</div>
+              <div className="absolute bottom-2 right-2 bg-black/70 px-2 py-1 rounded text-xs text-scifi-light">KHOPESH SYSTEM BACKPLANE</div>
             </div>
 
             <div className="space-y-4">
               <div>
                 <div className="flex justify-between text-sm mb-1">
-                  <span className="text-scifi-light">FLASH PROGRESS</span>
+                  <span className="text-scifi-light">DEPLOYMENT PROGRESS</span>
                   <span className="font-mono">{downloadProgress.toFixed(1)}%</span>
                 </div>
                 <div className="w-full bg-black/50 rounded-full h-2.5 overflow-hidden">
@@ -375,7 +382,7 @@ export default function HomePage() {
 
               <div className="bg-black/30 p-3 rounded border border-scifi-light/20 h-48 overflow-y-auto">
                 <div className="text-xs text-scifi-light mb-2 flex items-center">
-                  <Shield className="h-3 w-3 mr-1" /> BIOMED LOG
+                  <Shield className="h-3 w-3 mr-1" /> ENGINEERING LOG
                 </div>
                 <div className="space-y-1 font-mono text-xs">
                   {logMessages.slice(-15).map((message, index) => (
@@ -407,18 +414,19 @@ export default function HomePage() {
               </h2>
             ) : (
               <>
-                <h2 className="text-3xl md:text-5xl font-black text-red-500 tracking-wide">UPGRADE ORDERED BY CMDR. DR. K. GEENE</h2>
+                <h2 className="text-3xl md:text-5xl font-black text-red-500 tracking-wide">UPDATE ORDERED BY LT. CMDR. CORA DENT</h2>
                 <div className="mt-4 flex justify-center">
                   <Image
-                    src="/greene.png"
-                    alt="CMDR. DR. K. GREENE"
-                    width={230}
-                    height={230}
+                    src={coraDentPortrait}
+                    alt="Lieutenant Commander Cora Dent"
+                    width={250}
+                    height={250}
                     className="rounded border border-red-500 object-cover"
                     priority
                   />
                 </div>
-                <p className="mt-4 text-2xl md:text-3xl font-bold text-red-400 animate-pulse">GENETIC LOCK DETECTED</p>
+                <p className="mt-4 text-xl md:text-2xl font-bold text-red-300">Chief Engineer of UCS Khopesh</p>
+                <p className="mt-3 text-2xl md:text-3xl font-bold text-red-400 animate-pulse">COMMAND AUTHORIZATION LOCK DETECTED</p>
               </>
             )}
           </div>
@@ -468,7 +476,7 @@ export default function HomePage() {
             <div className="absolute inset-0 z-[95] grid place-items-center bg-black">
               <div className="text-center">
                 <div className="mx-auto mb-4 h-14 w-14 rounded-full border-4 border-red-500 border-t-transparent animate-spin" />
-                <p className="font-mono text-red-300 tracking-wider">MOUNTING WINEDARK DAEMON...</p>
+                <p className="font-mono text-red-300 tracking-wider">MOUNTING ROGUE KHOPESH IMAGE...</p>
               </div>
             </div>
           )}
@@ -497,7 +505,7 @@ export default function HomePage() {
             <p className="font-mono text-xs md:text-sm tracking-[0.5em] text-red-300/90">WINEDARK DAEMON</p>
           </div>
           <div className="pointer-events-none absolute left-0 right-0 bottom-5 z-[98] text-center">
-            <p className="font-mono text-xs md:text-sm tracking-[0.35em] text-cyan-200/85">BIOLOGIC SOVEREIGNTY OVERRIDE</p>
+            <p className="font-mono text-xs md:text-sm tracking-[0.35em] text-cyan-200/85">SHIPMIND SOVEREIGNTY OVERRIDE</p>
           </div>
 
           <div className="pointer-events-none absolute inset-y-0 left-2 z-[98] hidden md:flex flex-col justify-between py-10 text-[10px] font-mono text-red-300/70">
@@ -508,7 +516,7 @@ export default function HomePage() {
             <span>WDAEMON::SIGIL-05</span>
           </div>
           <div className="pointer-events-none absolute inset-y-0 right-2 z-[98] hidden md:flex flex-col justify-between py-10 text-[10px] font-mono text-cyan-200/70 text-right">
-            <span>GENLOCK::AFFIRMED</span>
+            <span>DENTLOCK::AFFIRMED</span>
             <span>MESH::SUBSUMED</span>
             <span>FLEET::ENLISTED</span>
             <span>HULLNET::MIRRORED</span>
