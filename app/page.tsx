@@ -4,14 +4,15 @@ import Image from "next/image"
 import { useEffect, useRef, useState } from "react"
 import { AlertTriangle, Maximize2, Server, Shield, Ship, Wifi } from "lucide-react"
 import coraDentPortrait from "../Shelley Snyder as Cora Dent.jpg"
+import hammerdown2 from "../hammerdown2.png"
 import khopeshLogo from "../khopesh.png"
+import captainLarsenPortrait from "../Larsen Tom .jpg"
 
-type Phase = "hammerdown" | "pre_glitch" | "activating" | "running"
-type CountermandStage = "none" | "failed" | "ordered"
+type Phase = "hammerdown" | "fleetwide_online" | "activating" | "running"
+type CountermandStage = "none" | "captain" | "override"
 
 export default function HomePage() {
   const [phase, setPhase] = useState<Phase>("hammerdown")
-  const [introGlitch, setIntroGlitch] = useState(false)
   const [glitchActive, setGlitchActive] = useState(false)
   const [countermandStage, setCountermandStage] = useState<CountermandStage>("none")
   const [countermandFlashOn, setCountermandFlashOn] = useState(true)
@@ -62,28 +63,28 @@ export default function HomePage() {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.code === "Space" && phase === "running" && countermandStage === "none" && !countermandCompleted) {
         event.preventDefault()
-        setCountermandStage("failed")
-        setCountermandFlashOn(false)
+        setCountermandStage("captain")
+        setCountermandFlashOn(true)
         setSecurityStatus("ALERT")
         setLogMessages((prev) => [
           ...prev,
-          "Countermand failed: Order and countermand have same source.",
+          "CAPTAIN AUTHORIZATION NEEDED",
         ])
 
-        // After 4 seconds, escalate to Dent authorization lock screen.
+        // After 4 seconds, escalate to Dent override screen.
         schedule(() => {
           if (!isMountedRef.current) return
-          setCountermandStage("ordered")
+          setCountermandStage("override")
           setCountermandFlashOn(true)
           setLogMessages((prev) => [
             ...prev,
-            "UPDATE ORDERED BY LT. CMDR. CORA DENT",
-            "CHIEF ENGINEER AUTHORIZATION LOCK DETECTED",
+            "CHIEF ENGINEER OVERRIDE ACTIVATED",
+            "LT. CMDR. CORA DENT ASSUMING COMMAND PATH",
           ])
 
           countermandIntervalRef.current = setInterval(() => {
             setCountermandFlashOn((v) => !v)
-            setLogMessages((prev) => [...prev.slice(-13), "CHIEF ENGINEER AUTHORIZATION LOCK DETECTED"])
+            setLogMessages((prev) => [...prev.slice(-13), "CHIEF ENGINEER OVERRIDE ACTIVATED"])
           }, 450)
 
           // Keep Dent stage visible for 7 seconds before allowing video trigger.
@@ -93,7 +94,7 @@ export default function HomePage() {
             setCountermandFlashOn(true)
             setCountermandCompleted(true)
             setSecurityStatus("SECURE")
-            setLogMessages((prev) => [...prev, "Command lock phase complete. Khopesh OS flash resumed."])
+            setLogMessages((prev) => [...prev, "Chief engineer override complete. Khopesh OS flash resumed."])
           }, 7000)
         }, 4000)
         return
@@ -102,22 +103,17 @@ export default function HomePage() {
       if (event.code !== "Space" || phase !== "hammerdown") return
       event.preventDefault()
 
-      setPhase("pre_glitch")
+      setPhase("fleetwide_online")
       setLogMessages((prev) => [
         ...prev,
-        "Command accepted. Stand by for pre-update integrity check.",
+        "KHOPESH FLEETWIDE UPDATE ONLINE.",
+        "Command accepted. Routing update across fleet command lattice.",
       ])
 
       schedule(() => {
         if (!isMountedRef.current) return
-        setIntroGlitch(true)
-      }, 3000)
-
-      schedule(() => {
-        if (!isMountedRef.current) return
-        setIntroGlitch(false)
         setPhase("activating")
-      }, 4600)
+      }, 2600)
 
       schedule(() => {
         if (!isMountedRef.current) return
@@ -128,7 +124,7 @@ export default function HomePage() {
           "Khopesh OS execution channel opened.",
           "Chief engineer control lattice is now calibrating.",
         ])
-      }, 7600)
+      }, 5600)
     }
 
     window.addEventListener("keydown", onKeyDown)
@@ -231,22 +227,42 @@ export default function HomePage() {
     }
   }, [])
 
-  if (phase === "hammerdown" || phase === "pre_glitch") {
+  if (phase === "hammerdown") {
     return (
-      <div className={`min-h-screen bg-black text-white flex items-center justify-center relative ${introGlitch ? "intro-glitch" : ""}`}>
+      <div className="min-h-screen bg-black text-white flex items-center justify-center relative">
         <button
           onClick={enterFullscreen}
           className="absolute top-4 right-4 z-20 inline-flex items-center gap-2 rounded border border-cyan-300/60 bg-black/70 px-3 py-2 text-xs font-mono tracking-wider text-cyan-100 hover:bg-black/90"
         >
           <Maximize2 className="h-4 w-4" /> FULL SCREEN
         </button>
-        <Image src="/HAMMERDOWN.png" alt="HAMMERDOWN" fill className="object-contain opacity-95" priority />
-        <div className="relative z-10 text-center px-6">
-          {phase === "pre_glitch" && (
-            <p className="mt-4 text-red-300 font-mono animate-pulse">AUTH TOKEN ACCEPTED. HOLD POSITION...</p>
-          )}
+        <Image src={hammerdown2} alt="Hammerdown 2" fill className="object-contain opacity-95" priority />
+      </div>
+    )
+  }
+
+  if (phase === "fleetwide_online") {
+    return (
+      <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center relative overflow-hidden">
+        <button
+          onClick={enterFullscreen}
+          className="absolute top-4 right-4 z-20 inline-flex items-center gap-2 rounded border border-cyan-300/60 bg-black/70 px-3 py-2 text-xs font-mono tracking-wider text-cyan-100 hover:bg-black/90"
+        >
+          <Maximize2 className="h-4 w-4" /> FULL SCREEN
+        </button>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,255,255,0.18),rgba(0,0,0,0.96)_55%)]" />
+        <div className="scanline" />
+        <div className="absolute inset-0 sci-fi-grid opacity-40" />
+        <div className="relative z-10 px-6 text-center">
+          <p className="text-cyan-200/80 font-mono tracking-[0.45em] text-xs md:text-sm">FLEET COMMAND UPLINK</p>
+          <h1 className="mt-6 text-5xl md:text-7xl font-black tracking-[0.08em] text-scifi-light glow-text">
+            KHOPESH FLEETWIDE
+            <span className="block text-white">UPDATE ONLINE</span>
+          </h1>
+          <p className="mt-6 text-sm md:text-lg font-mono text-cyan-100/80 animate-pulse">
+            DISTRIBUTING UCS KHOPESH OPERATING SYSTEM ACROSS ACTIVE VESSELS
+          </p>
         </div>
-        {introGlitch && <div className="absolute inset-0 bg-red-600/25 animate-pulse pointer-events-none" />}
       </div>
     )
   }
@@ -402,31 +418,47 @@ export default function HomePage() {
       </div>
 
       {countermandStage !== "none" && (
-        <div className={`fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 ${countermandStage === "ordered" && countermandFlashOn ? "countermand-flash" : ""}`}>
+        <div className={`fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 ${countermandFlashOn ? "countermand-flash" : ""}`}>
           <div className="w-full max-w-3xl border-2 border-red-500 bg-black/95 shadow-[0_0_30px_rgba(255,0,0,0.8)] rounded-lg p-5 text-center">
             <div className="flex items-center justify-center mb-3 text-red-400">
               <AlertTriangle className="mr-2" />
               <span className="font-mono tracking-widest">SECURITY OVERRIDE</span>
             </div>
-            {countermandStage === "failed" ? (
-              <h2 className="text-3xl md:text-5xl font-black text-red-500 tracking-wide">
-                Countermand failed: Order and countermand have same source
-              </h2>
+            {countermandStage === "captain" ? (
+              <>
+                <h2 className="text-3xl md:text-5xl font-black text-red-500 tracking-wide">CAPTAIN AUTHORIZATION NEEDED</h2>
+                <div className="mt-4 flex justify-center">
+                  <div className="h-[250px] w-[250px] overflow-hidden rounded border border-red-500">
+                    <Image
+                      src={captainLarsenPortrait}
+                      alt="Captain Larsen"
+                      width={250}
+                      height={250}
+                      className="h-full w-full scale-110 object-cover object-[center_18%]"
+                      priority
+                    />
+                  </div>
+                </div>
+                <p className="mt-4 text-xl md:text-2xl font-bold text-red-300">Captain Larsen</p>
+                <p className="mt-3 text-2xl md:text-3xl font-bold text-red-400 animate-pulse">COMMAND SIGNOFF REQUIRED</p>
+              </>
             ) : (
               <>
-                <h2 className="text-3xl md:text-5xl font-black text-red-500 tracking-wide">UPDATE ORDERED BY LT. CMDR. CORA DENT</h2>
+                <h2 className="text-3xl md:text-5xl font-black text-red-500 tracking-wide">CHIEF ENGINEER OVERRIDE ACTIVATED</h2>
                 <div className="mt-4 flex justify-center">
-                  <Image
-                    src={coraDentPortrait}
-                    alt="Lieutenant Commander Cora Dent"
-                    width={250}
-                    height={250}
-                    className="rounded border border-red-500 object-cover"
-                    priority
-                  />
+                  <div className="h-[250px] w-[250px] overflow-hidden rounded border border-red-500">
+                    <Image
+                      src={coraDentPortrait}
+                      alt="Lieutenant Commander Cora Dent"
+                      width={250}
+                      height={250}
+                      className="h-full w-full scale-110 object-cover object-[center_18%]"
+                      priority
+                    />
+                  </div>
                 </div>
                 <p className="mt-4 text-xl md:text-2xl font-bold text-red-300">Chief Engineer of UCS Khopesh</p>
-                <p className="mt-3 text-2xl md:text-3xl font-bold text-red-400 animate-pulse">COMMAND AUTHORIZATION LOCK DETECTED</p>
+                <p className="mt-3 text-2xl md:text-3xl font-bold text-red-400 animate-pulse">LT. CMDR. CORA DENT OVERRIDE ACTIVE</p>
               </>
             )}
           </div>
@@ -434,11 +466,6 @@ export default function HomePage() {
       )}
 
       <style jsx global>{`
-        .intro-glitch {
-          animation: introGlitch 0.12s infinite;
-          filter: saturate(1.6) contrast(1.2);
-        }
-
         .virus-glitch {
           animation: virusGlitch 0.15s infinite;
           filter: saturate(1.6) contrast(1.25) hue-rotate(-12deg);
@@ -446,14 +473,6 @@ export default function HomePage() {
 
         .countermand-flash {
           animation: countermandPulse 0.2s infinite;
-        }
-
-        @keyframes introGlitch {
-          0% { transform: translate(0, 0); }
-          25% { transform: translate(5px, -3px); }
-          50% { transform: translate(-4px, 3px); }
-          75% { transform: translate(4px, 4px); }
-          100% { transform: translate(0, 0); }
         }
 
         @keyframes virusGlitch {

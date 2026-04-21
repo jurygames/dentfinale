@@ -1,0 +1,27 @@
+Winedark local download status
+
+Target file location:
+
+C:\Users\Tom\Documents\Repos\dentfinale\capture-export\winedark\winedark-source.mp4
+
+Current result:
+
+No local MP4 was found in the repo, and automated download from Vimeo did not complete from the shell.
+
+Reason:
+
+The Vimeo player is currently protected by privacy / Cloudflare verification in this environment, so direct shell download attempts returned:
+
+- 403 Forbidden on the config endpoint
+- connection/security verification page on the player page
+
+Embedded source used by the app:
+
+https://player.vimeo.com/video/1110696867?autoplay=1&loop=1&controls=0&title=0&byline=0&portrait=0&preload=auto&background=1&quality=auto&color=000000
+
+Practical fallback:
+
+1. Run the app locally.
+2. Open the Winedark segment in a normal browser session.
+3. Use OBS to capture it, or inspect the browser network tab during playback to identify the media URL interactively.
+
