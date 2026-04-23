@@ -3,10 +3,10 @@
 import Image from "next/image"
 import { useEffect, useRef, useState } from "react"
 import { AlertTriangle, Maximize2, Server, Shield, Ship, Wifi, Wrench } from "lucide-react"
-import coraDentPortrait from "../Shelley Snyder as Cora Dent.jpg"
+import coraDentPortrait from "../cora-dent-optimized.jpg"
 import hammerdown2 from "../hammerdown2.png"
 import khopeshLogo from "../khopesh.png"
-import captainLarsenPortrait from "../Larsen Tom .jpg"
+import captainLarsenPortrait from "../captain-larsen-optimized.jpg"
 
 type Phase = "hammerdown" | "fleetwide_online" | "activating" | "running"
 type CountermandStage = "none" | "captain" | "override"
@@ -331,7 +331,7 @@ export default function HomePage() {
             />
             <div className="max-w-md rounded-lg border border-scifi-light/30 bg-black/40 px-4 py-3 text-left">
               <p className="text-xs font-mono tracking-[0.28em] text-cyan-200/75">PRIMARY AUTHORITY</p>
-              <p className="mt-2 text-xl font-bold text-white">Lt. Commander Cora Dent</p>
+              <p className="mt-2 text-xl font-bold text-white">LT. COMMANDER CORA DENT</p>
               <p className="text-sm text-scifi-light/80">Chief Engineer of UCS Khopesh</p>
             </div>
           </div>
@@ -471,7 +471,7 @@ export default function HomePage() {
                       alt="Lieutenant Commander Cora Dent"
                       width={250}
                       height={250}
-                      className="h-full w-full scale-110 object-cover object-[center_18%]"
+                      className="h-full w-full scale-[1.24] object-cover object-[center_12%]"
                       priority
                     />
                   </div>
