@@ -132,6 +132,20 @@ export default function HomePage() {
   }, [phase, countermandStage, countermandCompleted])
 
   useEffect(() => {
+    const preloadSources = [
+      hammerdown2.src,
+      khopeshLogo.src,
+      captainLarsenPortrait.src,
+      coraDentPortrait.src,
+    ]
+
+    preloadSources.forEach((src) => {
+      const img = new window.Image()
+      img.src = src
+    })
+  }, [])
+
+  useEffect(() => {
     if (phase !== "running" || glitchActive) return
 
     progressIntervalRef.current = setInterval(() => {
