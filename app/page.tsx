@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import { useEffect, useRef, useState } from "react"
-import { AlertTriangle, Maximize2, Server, Shield, Ship, Wifi } from "lucide-react"
+import { AlertTriangle, Maximize2, Server, Shield, Ship, Wifi, Wrench } from "lucide-react"
 import coraDentPortrait from "../Shelley Snyder as Cora Dent.jpg"
 import hammerdown2 from "../hammerdown2.png"
 import khopeshLogo from "../khopesh.png"
@@ -433,16 +433,16 @@ export default function HomePage() {
 
       {countermandStage !== "none" && (
         <div className={`fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 ${countermandFlashOn ? "countermand-flash" : ""}`}>
-          <div className="w-full max-w-3xl border-2 border-red-500 bg-black/95 shadow-[0_0_30px_rgba(255,0,0,0.8)] rounded-lg p-5 text-center">
-            <div className="flex items-center justify-center mb-3 text-red-400">
-              <AlertTriangle className="mr-2" />
-              <span className="font-mono tracking-widest">SECURITY OVERRIDE</span>
+          <div className={`w-full max-w-3xl bg-black/95 rounded-lg p-5 text-center ${countermandStage === "captain" ? "border-2 border-amber-400 shadow-[0_0_30px_rgba(251,191,36,0.75)]" : "border-2 border-red-500 shadow-[0_0_30px_rgba(255,0,0,0.8)]"}`}>
+            <div className={`flex items-center justify-center mb-3 ${countermandStage === "captain" ? "text-amber-300" : "text-red-400"}`}>
+              {countermandStage === "captain" ? <AlertTriangle className="mr-2" /> : <Wrench className="mr-2" />}
+              <span className="font-mono tracking-widest">{countermandStage === "captain" ? "UPLOAD COUNTERMANDED" : "ENGINEERING OVERRIDE"}</span>
             </div>
             {countermandStage === "captain" ? (
               <>
-                <h2 className="text-3xl md:text-5xl font-black text-red-500 tracking-wide">CAPTAIN AUTHORIZATION NEEDED</h2>
+                <h2 className="text-3xl md:text-5xl font-black text-amber-300 tracking-wide">UPLOAD COUNTERMANDED</h2>
                 <div className="mt-4 flex justify-center">
-                  <div className="h-[250px] w-[250px] overflow-hidden rounded border border-red-500">
+                  <div className="h-[250px] w-[250px] overflow-hidden rounded border border-amber-400">
                     <Image
                       src={captainLarsenPortrait}
                       alt="Captain Larsen"
@@ -453,12 +453,17 @@ export default function HomePage() {
                     />
                   </div>
                 </div>
-                <p className="mt-4 text-xl md:text-2xl font-bold text-red-300">Captain Larsen</p>
-                <p className="mt-3 text-2xl md:text-3xl font-bold text-red-400 animate-pulse">COMMAND SIGNOFF REQUIRED</p>
+                <p className="mt-4 text-xl md:text-2xl font-bold text-amber-200">Authority: Captain E. Larsen</p>
+                <p className="mt-3 text-2xl md:text-3xl font-bold text-amber-300 animate-pulse">FLEET UPLOAD HALTED BY CAPTAIN'S COUNTERMAND</p>
               </>
             ) : (
               <>
                 <h2 className="text-3xl md:text-5xl font-black text-red-500 tracking-wide">CHIEF ENGINEER OVERRIDE ACTIVATED</h2>
+                <div className="mt-4 flex items-center justify-center gap-4 text-red-400">
+                  <Wrench className="h-9 w-9" />
+                  <Wrench className="h-12 w-12 rotate-45" />
+                  <Wrench className="h-9 w-9 scale-x-[-1]" />
+                </div>
                 <div className="mt-4 flex justify-center">
                   <div className="h-[250px] w-[250px] overflow-hidden rounded border border-red-500">
                     <Image
@@ -472,7 +477,7 @@ export default function HomePage() {
                   </div>
                 </div>
                 <p className="mt-4 text-xl md:text-2xl font-bold text-red-300">Chief Engineer of UCS Khopesh</p>
-                <p className="mt-3 text-2xl md:text-3xl font-bold text-red-400 animate-pulse">LT. CMDR. CORA DENT OVERRIDE ACTIVE</p>
+                <p className="mt-3 text-2xl md:text-3xl font-bold text-red-400 animate-pulse">COUNTERMAND REVOKED. LT. CMDR. CORA DENT OVERRIDE ACTIVE</p>
               </>
             )}
           </div>
